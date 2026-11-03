@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#11111d">
-    <title>Nexora CRM | داشبورد مدیریت</title>
+    <title>@yield('title')</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -80,17 +80,9 @@
                         <span class="flex-1">داشبورد</span>
                         <span class="h-2 w-2 rounded-full bg-violet-500"></span>
                     </a>
-                    @can('contacts.view')
-                    <a href="#contacts" class="group flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-gray-600 transition hover:bg-gray-100 hover:text-violet-600 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-violet-400">
-                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                            <path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                            <circle cx="10" cy="7" r="4"/>
-                            <path d="M20 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
-                        </svg>
-                        <span class="flex-1">مخاطبین و مشتریان</span>
-                        <span class="rounded-md bg-gray-100 px-2 py-0.5 text-[10px] text-gray-500 dark:bg-gray-800">128</span>
-                    </a>
-                    @endcan
+                    <x-ui.link href="#" text="مخاطبین و مشتریان" target="_blank">
+                        <x-icons.dashboard />
+                    </x-ui.link>
 
                     <a href="#companies" class="group flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-gray-600 transition hover:bg-gray-100 hover:text-violet-600 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-violet-400">
                         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -222,14 +214,9 @@
                         </svg>
                         <span class="flex-1">کاربران و تیم</span>
                     </a>
-
-                    <a href="#roles" class="group flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-gray-600 transition hover:bg-gray-100 hover:text-violet-600 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-violet-400">
-                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                            <path d="M12 3 4 7v5c0 5 3.5 8 8 9 4.5-1 8-4 8-9V7l-8-4Z"/>
-                            <path d="m9 12 2 2 4-4"/>
-                        </svg>
-                        <span class="flex-1">نقش‌ها و دسترسی‌ها</span>
-                    </a>
+                    <x-ui.link href="{{route('dashboard.role.index')}}" text="نقش‌ها و دسترسی‌ها">
+                        <x-icons.shield-check />
+                    </x-ui.link>
 
                     <a href="#settings" class="group flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-gray-600 transition hover:bg-gray-100 hover:text-violet-600 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-violet-400">
                         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -281,7 +268,70 @@
     </aside>
 
     <!-- Main Content -->
-    @yield('content')
+
+    <main class="min-h-screen lg:mr-[280px]">
+        <!-- Topbar -->
+        <header class="sticky top-0 z-30 flex h-[76px] items-center justify-between border-b border-gray-200 bg-white/90 px-5 backdrop-blur-xl dark:border-gray-800 dark:bg-[#11111d]/90 sm:px-8">
+
+            <div class="flex items-center gap-3">
+                <button id="openSidebar" class="rounded-xl border border-gray-200 p-2.5 text-gray-600 hover:bg-gray-100 dark:border-gray-800 dark:text-gray-300 dark:hover:bg-gray-800 lg:hidden" aria-label="باز کردن منو">
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+
+                <div>
+                    <h1 class="text-base font-extrabold sm:text-lg">داشبورد</h1>
+                    <p class="mt-0.5 hidden text-xs text-gray-500 dark:text-gray-400 sm:block">
+                        نمای کلی وضعیت کسب‌وکار شما
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 sm:gap-3">
+
+                <!-- Search -->
+                <div class="relative hidden md:block">
+                    <svg class="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="7"/>
+                        <path d="m20 20-4-4"/>
+                    </svg>
+                    <input type="search" placeholder="جستجو در Nexora..."
+                           class="h-10 w-64 rounded-xl border border-gray-200 bg-gray-50 pr-10 pl-4 text-xs outline-none transition focus:border-violet-500 focus:ring-2 focus:ring-violet-500/10 dark:border-gray-800 dark:bg-gray-900 dark:text-white dark:placeholder:text-gray-500">
+                </div>
+
+                <!-- Theme -->
+                <button id="themeToggle" class="flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-600 transition hover:border-violet-400 hover:text-violet-500 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300" aria-label="تغییر تم">
+                    <svg id="themeIcon" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M21.752 15.002A9.718 9.718 0 0112.75 21 9.75 9.75 0 013.002 11.25 9.718 9.718 0 019 2.248 9.75 9.75 0 0021.752 15.002z"/>
+                    </svg>
+                </button>
+
+                <!-- Notifications -->
+                <button class="relative flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-600 transition hover:border-violet-400 hover:text-violet-500 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300" aria-label="اعلان‌ها">
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+                        <path d="M10 21h4"/>
+                    </svg>
+                    <span class="absolute right-2 top-2 h-2 w-2 rounded-full border-2 border-white bg-red-500 dark:border-gray-900"></span>
+                </button>
+
+                <!-- Profile -->
+                <button class="flex h-10 items-center gap-2 rounded-xl border border-gray-200 bg-white px-2 transition hover:border-violet-400 dark:border-gray-800 dark:bg-gray-900 sm:px-3">
+                    <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 text-xs font-bold text-white">ع</span>
+                    <span class="hidden text-xs font-bold sm:block">علی رضایی</span>
+                    <svg class="hidden h-3 w-3 text-gray-400 sm:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="m6 9 6 6 6-6"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+        <div class="p-4">
+            @yield('content')
+
+        </div>
+
+    </main>
 
 
 </div>
